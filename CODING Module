@@ -1,1 +1,41 @@
-
+STEP 1: Import necessary Libraries
+STEP 2: Read and load dataset
+STEP 3: Exploratory Data Analysis(EDA)
+   - Get 5 top records of data
+   - Columns/features of data
+   - Length of dataset
+   - Shape of data
+   - Data information
+   - Datatypes of all columns
+   - Checking for null values
+   - Check unique target values (0,4)
+STEP 4: Data visualization of target variables
+   - plotting distribution of data (bar plot, count plot)
+STEP 5: Data Preprocessing
+   STEP 5.1: Selecting text and target column for further analysis
+   STEP 5.2: Printing unique values of target variables
+   STEP 5.3: Seperating positive and negative tweets
+   STEP 5.4: Taking 1/4 th of our dataset so we can run it on our machine easily
+   STEP 5.5: Combing positive and negative tweets
+   STEP 5.6: Making statement text in lowercase
+   STEP 5.7: Defining set containing all stopwords in english
+   STEP 5.8: Cleaning and removing above stopwords
+   STEP 5.9: Cleaning and removing punctuations
+   STEP 5.10: Cleaning and removing repeating characters
+   STEP 5.11: Cleaning and removing URLs
+   STEP 5.12: Cleaning and removing numeric numbers
+   STEP 5.13: Getting tokenization of tweet text
+   STEP 5.14: Applying stemming
+   STEP 5.15: Applying lemmitizer
+   STEP 5.16: Seperating input features and labels
+   STEP 5.17: Find a cloud of words for negative and positive tweets seperately
+STEP 6: Splitting data into test and train sets
+STEP 7: Transforming dataset using TF-IDF vectorizer
+   STEP 7.1: Fit the TF-IDF vectorizer
+   STEP 7.2: Transform data using TF-IDF vectorizer
+STEP 8: Function for model evaluation
+   -- Accuracy score -- Confusion matrix with plot -- ROC-AUC Curve
+STEP 9: Model building
+   - Bermoulli Naive Bayes Classifier
+   - SVM(Support Vector Machine)
+   - Logistic Regression
