@@ -126,7 +126,7 @@ data['target'].unique()
 # In[36]:
 
 
-data_pos = data[data['target'] == 1]
+data_pos = data[data['target'] == 4]
 data_neg = data[data['target'] == 0]
 
 
@@ -197,7 +197,7 @@ dataset['text'].tail()
 
 
 def cleaning_repeating_char(text):
-    return re.sub(r'(.)1+', r'1', text)
+    return re.sub(r'(.)\1+', r'\1', text)
 dataset['text'] = dataset['text'].apply(lambda x: cleaning_repeating_char(x))
 dataset['text'].tail()
 
@@ -206,7 +206,7 @@ dataset['text'].tail()
 
 
 def cleaning_URLs(data):
-    return re.sub('((www.[^s]+)|(https?://[^s]+))',' ',data)
+    return re.sub('((www\.[^\s]+)|(https?://[^s\]+))',' ', text)
 dataset['text'] = dataset['text'].apply(lambda x: cleaning_URLs(x))
 dataset['text'].tail()
 
@@ -224,7 +224,7 @@ dataset['text'].tail()
 
 
 from nltk.tokenize import RegexpTokenizer
-tokenizer = RegexpTokenizer(r'w+')
+tokenizer = RegexpTokenizer(r'\w+')
 dataset['text'] = dataset['text'].apply(tokenizer.tokenize)
 dataset['text'].head()
 
@@ -236,7 +236,7 @@ import nltk
 st = nltk.PorterStemmer()
 def stemming_on_text(data):
     text = [st.stem(word) for word in data]
-    return data
+    return text
 dataset['text']= dataset['text'].apply(lambda x: stemming_on_text(x))
 dataset['text'].head()
 
@@ -247,7 +247,7 @@ dataset['text'].head()
 lm = nltk.WordNetLemmatizer()
 def lemmatizer_on_text(data):
     text = [lm.lemmatize(word) for word in data]
-    return data
+    return text
 dataset['text'] = dataset['text'].apply(lambda x: lemmatizer_on_text(x))
 dataset['text'].head()
 
@@ -255,8 +255,8 @@ dataset['text'].head()
 # In[68]:
 
 
-X=data.text
-y=data.target
+X=dataset.text
+y=dataset.target
 
 
 # In[70]:
@@ -289,6 +289,8 @@ X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.05, random
 
 
 vectoriser = TfidfVectorizer(ngram_range=(1,2), max_features=500000)
+X_train = vectoriser.fit_transform(X_train)
+X_test = vectoriser.transform(X_test)
 vectoriser.fit(X_train)
 print('No. of feature_words: ', len(vectoriser.get_feature_names()))
 
@@ -307,7 +309,8 @@ def model_Evaluate(model):
     group_names = ['True Neg','False Pos', 'False Neg','True Pos']
     group_percentages = ['{0:.2%}'.format(value) for value in cf_matrix.flatten() / np.sum(cf_matrix)]
     labels = [f'{v1}n{v2}' for v1, v2 in zip(group_names,group_percentages)]
-lemmatizer_on_text   labels = np.asarray(labels).reshape(2,2)
+# lemmatizer_on_text
+    labels = np.asarray(labels).reshape(2,2)
     sns.heatmap(cf_matrix, annot = labels, cmap = 'Blues',fmt = '',
     xticklabels = categories, yticklabels = categories)
     plt.xlabel("Predicted values", fontdict = {'size':14}, labelpad = 10)
@@ -328,6 +331,7 @@ y_pred1 = BNBmodel.predict(X_test)
 
 
 from sklearn.metrics import roc_curve, auc
+y_score = model.predict_proba(X_test)[:,1]
 fpr, tpr, thresholds = roc_curve(y_test, y_pred1)
 roc_auc = auc(fpr, tpr)
 plt.figure()
